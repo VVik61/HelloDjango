@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 3rem auto; text-align: center;">
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2 style="color: #dc3545; margin-bottom: 1.5rem;">Ошибка</h2>
+        <p style="margin-bottom: 2rem;">Произошла ошибка при обработке анкеты. Пожалуйста, попробуйте позже.</p>
+
+        <a href="{% url 'anketa:start_anketa' %}" class="btn" style="background: #388f1e; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px; display: inline-block;">
+            Попробовать снова
+        </a>
+    </div>
+</div>
+{% endblock %}

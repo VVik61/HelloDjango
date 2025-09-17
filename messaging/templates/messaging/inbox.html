@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Входящие сообщения{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Входящие сообщения</h2>
+
+    <div class="message-list">
+        {% for message in messages %}
+        <div class="message {% if not message.is_read %}unread{% endif %}">
+            <a href="{% url 'messaging:detail' message.id %}">
+                <strong>От:</strong> {{ message.sender.get_full_name|default:message.sender.username }}
+                <br>
+                <small>{{ message.timestamp|date:"d.m.Y H:i" }}</small>
+                <p>{{ message.message|truncatechars:100 }}</p>
+            </a>
+        </div>
+        {% empty %}
+        <p>Нет сообщений</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'messaging:send' %}" class="btn">Написать сообщение</a>
+</div>
+
+<style>
+    .message {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .unread {
+        background-color: #f8f9fa;
+        border-left: 4px solid #388f1e;
+    }
+</style>
+{% endblock %}

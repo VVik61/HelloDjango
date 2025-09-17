@@ -1,0 +1,100 @@
+{% extends "anketa/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="progress mb-4">
+        <div class="progress-bar" role="progressbar"
+             style="width: {{ progress.percentage }}%"
+             aria-valuenow="{{ progress.percentage }}"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            Вопрос {{ progress.current }} из {{ progress.total }}
+        </div>
+    </div>
+
+    <form method="POST" action="" id="anketaForm">
+        {% csrf_token %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title">{{ question.ankvopros }}</h4>
+
+                {% if question.ankprim %}
+                    <p class="text-muted">{{ question.ankprim }}</p>
+                {% endif %}
+
+                <div class="form-group">
+                    <div class="mb-3">
+                        {% for choice in form.ankotvet %}
+                            <div class="form-check">
+                                {{ choice.tag }}
+                                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        {% if form.ankotvet.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form.ankotvet.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.ankpoysn.id_for_label }}" class="form-label">
+                        Дополнительные пояснения:
+                    </label>
+                    {{ form.ankpoysn }}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-secondary">
+            {% if progress.current == progress.total %}
+                Завершить анкету
+            {% else %}
+                Следующий вопрос &raquo;
+            {% endif %}
+        </button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('anketaForm');
+
+    form.addEventListener('submit', function(e) {
+        const radioButtons = form.querySelectorAll('input[type="radio"]');
+        let isChecked = false;
+
+        radioButtons.forEach(radio => {
+            if (radio.checked) isChecked = true;
+        });
+
+        if (!isChecked) {
+            e.preventDefault();
+            alert('Пожалуйста, выберите вариант ответа!');
+            return false;
+        }
+        return true;
+    });
+});
+
+</script>
+
+<style>
+.progress {
+    height: 30px;
+    border-radius: 15px;
+}
+.progress-bar {
+    background-color: #388f1e;
+    line-height: 30px;
+    transition: width 0.3s ease;
+}
+.form-check-input {
+    margin-right: 10px;
+}
+</style>
+{% endblock %}

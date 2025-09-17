@@ -1,0 +1,48 @@
+/* Стили для анкеты */
+.anketa-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.question {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Адаптация форм */
+.form-check {
+    margin-bottom: 0.5rem;
+}
+
+textarea.form-control {
+    min-height: 100px;
+}
+
+
+body {
+    padding-top: 20px;
+}
+
+.table-actions {
+    white-space: nowrap;
+    width: 1%;
+}
+
+/* Добавьте в ваш CSS файл */
+.radio-options {
+    margin: 15px 0;
+}
+
+.form-check {
+    margin-bottom: 10px;
+}
+
+.form-check-input {
+    margin-right: 10px;
+}
+
+.form-check-label {
+    cursor: pointer;
+}

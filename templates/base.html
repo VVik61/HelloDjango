@@ -2,15 +2,26 @@
 {% load static %}
 <html>
 <head>
-    <title>Приветствие</title>
+    <title>Медицинский портал "Кардиология, Наро-Фоминск"</title>
     <link rel="shortcut icon"
-    type="image/x-icon"
-    href="{% static 'admin/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+              type="image/x-icon"
+              href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'global/css/menu.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.6.0/css/all.css">
 </head>
 <body>
     <main class="content" id="main-content">
         {% block content %}{% endblock %}
     </main>
+    {% include 'includes/footer.html' %}
+    <script src="{% static 'global/js/menu.js' %}"></script >
 </body>
+{% comment %} <script>
+    // Проверяем наличие pers_id в сессии
+    if (window.location.pathname === "{% url 'anketa:start' %}" 
+        && "{{ request.session.pers_id }}") {
+        window.location.href = "{% url 'anketa:success' %}";
+    }
+</script> {% endcomment %}
 </html>

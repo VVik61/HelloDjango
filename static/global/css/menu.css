@@ -1,0 +1,87 @@
+/* Главное меню */
+.main-menu {
+    /* font-weight: bold; */
+    font-family: sans-serif; /*Arial, */
+    background: green;  /* red; */
+    color: black; /*  white; */
+    padding: 0 0px;
+}
+
+.main-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-link {
+    color:  #f4f4f4;
+    display: flex;
+    padding: 5px 5px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.menu-link:hover {
+    background: teal;	/*  #000000;*/
+	height: auto;
+}
+
+/* Подменю */
+
+
+.submenu li a {
+    color:  #0056b3;
+
+    display: block;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+
+.submenu li a:hover {
+    background: teal; /* white; */
+}
+
+/* Основной контент */
+.content {
+    padding: 2px;
+    max-width: 100%;  /* 992200px; */
+    margin: 0 auto;
+}
+
+.content-wrapper {
+    background: white; /* teal;  */
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    min-height: 10px;
+}
+
+.has-children > a::after {
+    content: "▼";
+    margin-left: 2px;
+    font-size: 0.8em;
+}
+
+.submenu-container {
+    position: relative;
+    left: 0;
+    background: white; /*блок субменю teal; */
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+    min-width: 20px;
+    z-index: 100;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 15px;
+}
+
+.submenu-item {
+    position: relative;
+}
+

@@ -1,0 +1,183 @@
+{% extends "core/index.html" %}
+
+{% block extra_css %}
+<style>
+    .anketa-container {
+        max-height: 80vh;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
+    .question-block {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        border-left: 4px solid #388f1e;
+    }
+    .form-check {
+        margin-bottom: 10px;
+    }
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+    .comment-field {
+        display: none;
+        margin-top: 10px;
+    }
+    .question-explanation {
+        font-size: 0.9em;
+        color: #6c757d;
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+    .card-header {
+        background-color: #388f1e !important;
+    }
+
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Функция для показа/скрытия поля комментария
+    function toggleComment(questionId) {
+        const commentField = document.getElementById(`id_comment_${questionId}`);
+        const radioYes = document.querySelector(`input[name="question_${questionId}"][value="yes"]:checked`);
+
+        if (radioYes) {
+            commentField.style.display = 'block';
+        } else {
+            commentField.style.display = 'none';
+            commentField.value = '';
+        }
+    }
+
+    // Инициализация при загрузке
+    {% for question in questions %}
+        toggleComment('{{ question.id }}');
+    {% endfor %}
+
+    // Обработчики изменений
+    document.querySelectorAll('input[type="radio"][name^="question_"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const questionId = this.name.split('_')[1];
+            toggleComment(questionId);
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Анкета анамнеза при госпитализации</h2>
+
+    <form method="post" id="anketa-form">
+        {% csrf_token %}
+		
+        <div class="anketa-container">
+		  {% if questions.exists %}	
+            <div class="card mb-4">
+                <div class="card-header text-white">
+                    <h4>Личные данные</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="required-field">{{ form.full_name.label }}</label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}
+                            <div class="text-danger">{{ form.full_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required-field">{{ form.birth_date.label }}</label>
+                        {{ form.birth_date }}
+                        {% if form.birth_date.errors %}
+                            <div class="text-danger">{{ form.birth_date.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required-field">Пол:</label>
+                        <div class="d-flex">
+                            {% for radio in form.gender %}
+                                <div class="form-check mr-3">
+                                    {{ radio.tag }}
+                                    <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                        {{ radio.choice_label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.gender.errors %}
+                            <div class="text-danger">{{ form.gender.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header text-white">
+                    <h4>Вопросы анамнеза</h4>
+                </div>
+                <div class="card-body">
+                    {% for question in questions %}
+                        <div class="question-block">
+                            <h5>{{ forloop.counter }}. {{ question.text }}</h5>
+                            {% if question.explanation %}
+                                <div class="question-explanation">
+                                    {{ question.explanation }}
+                                </div>
+                            {% endif %}
+
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio"
+                                           name="question_{{ question.id }}"
+                                           id="question_{{ question.id }}_yes"
+                                           value="yes">
+                                    <label class="form-check-label" for="question_{{ question.id }}_yes">
+                                        Да
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio"
+                                           name="question_{{ question.id }}"
+                                           id="question_{{ question.id }}_no"
+                                           value="no" checked>
+                                    <label class="form-check-label" for="question_{{ question.id }}_no">
+                                        Нет
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea class="form-control comment-field"
+                                          id="id_comment_{{ question.id }}"
+                                          name="comment_{{ question.id }}"
+                                          cols="80"
+                                          rows="2"
+                                          placeholder="Уточните ваш ответ (если требуется)"></textarea>
+                            </div>
+                        </div>
+					{% empty %}	
+					    Извините, OХХХ.... ВОПРОСЫ для анкеты не подготовлены. Обратитесь к администрации сайта.
+                    {% endfor %}
+					
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg" >Завершить анкетирование</button>
+        </div>
+	   {% else %}
+	      Извините. ВОПРОСЫ для анкеты НЕ ПОДГОТОВЛЕНЫ. Обратитесь к администрации сайта.
+       {% endif %}
+
+</div>
+{% include "main/na1str.html" %}
+{% endblock %}

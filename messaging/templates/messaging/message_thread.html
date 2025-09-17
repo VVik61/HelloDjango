@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Переписка с {{ other_user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Переписка с {{ other_user.get_full_name }}</h2>
+
+    <div class="message-thread">
+        {% for message in messages %}
+        <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+            <div class="message-header">
+                <strong>{{ message.sender.get_full_name }}</strong>
+                <small class="text-muted">{{ message.timestamp|date:"d.m.Y H:i" }}</small>
+            </div>
+            <div class="message-subject">{{ message.subject }}</div>
+            <div class="message-body">{{ message.body|linebreaks }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'messaging:send_to' other_user.id %}" class="btn btn-primary">
+            <i class="fas fa-reply"></i> Ответить
+        </a>
+        <a href="{% url 'messaging:inbox' %}" class="btn btn-secondary">
+            <i class="fas fa-inbox"></i> Вернуться в inbox
+        </a>
+    </div>
+</div>
+
+<style>
+    .message {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    .message.sent {
+        background-color: #e3f2fd;
+        margin-left: 20%;
+    }
+    .message.received {
+        background-color: #f8f9fa;
+        margin-right: 20%;
+    }
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+    .message-subject {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}

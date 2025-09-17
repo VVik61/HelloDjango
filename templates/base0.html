@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Приветствие</title>
+    <link rel="shortcut icon"
+    type="image/x-icon"
+    href="{% static 'admin/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+</head>
+<body>
+    <main class="content" id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
