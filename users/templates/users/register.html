@@ -1,0 +1,89 @@
+<!-- users/templates/users/register.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin: 3rem auto;">
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; color: #388f1e; margin-bottom: 1.5rem;">Регистрация</h2>
+        
+        {% if messages %}
+        <div class="alert-message" style="color: #dc3545; padding: 0.75rem; margin-bottom: 1.5rem; border-radius: 4px; background-color: #f8d7da;">
+            {% for message in messages %}
+                <p style="margin: 0;">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" id="registerForm">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.field.required %}*{% endif %}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn" style="background: #388f1e; color: white; width: 100%; padding: 0.75rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;">
+                Зарегистрироваться
+            </button>
+            
+            <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+                <p>Уже есть аккаунт? <a href="{% url 'login' %}" style="color: #388f1e;">Войти</a></p>
+            </div>
+        </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.querySelector('.phone-input');
+
+    // Автодобавление +7 при фокусе
+    phoneInput.addEventListener('focus', function() {
+        if (!this.value.startsWith('+7')) {
+            this.value = '+7';
+        }
+    });
+
+    // Маска ввода
+    phoneInput.addEventListener('input', function(e) {
+        let digits = this.value.replace(/\D/g, '');
+
+        // Обработка номера, начинающегося с 8
+        if (digits.startsWith('8') && digits.length > 1) {
+            digits = '7' + digits.slice(1);
+        }
+
+        // Ограничение длины
+        digits = digits.slice(0, 11);
+
+        // Форматирование
+        let formatted = '+7';
+        if (digits.length > 1) formatted += `(${digits.slice(1, 4)}`;
+        if (digits.length > 4) formatted += `)${digits.slice(4, 7)}`;
+        if (digits.length > 7) formatted += `-${digits.slice(7, 9)}`;
+        if (digits.length > 9) formatted += `-${digits.slice(9)}`;
+
+        this.value = formatted;
+    });
+
+    // Запрет удаления +7
+    phoneInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.selectionStart <= 2) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% include "main/na1str.html" %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Прикрепить пациентов к врачу</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group  mb-3">
+            <label>Выберите пациентов:</label>
+            <select name="doctor" class="form-select" required>
+                {% for doctor in doctors %}
+                <option value="{{ doctor.pk }}">
+                    {{ doctor.get_full_name|default:doctor.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Выберите пациентов:</label>
+            {% for patient in unassigned_patients %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="patients" value="{{ patient.pk }}"
+                       id="patient_{{ patient.pk }}">
+                <label class="form-check-label" for="patient_{{ patient.pk }}">
+                    {{ patient.get_full_name|default:patient.username }}
+                    {% if patient.assigned_doctor %}
+                        (текущий врач: {{ patient.assigned_doctor.get_full_name }})
+                    {% endif %}
+                </label>
+            </div>
+            {% empty %}
+            <p>Нет доступных пациентов для прикрепления</p>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Прикрепить выбранных пациентов</button>
+    </form>
+</div>
+{% include "main/na1str.html" %}
+{% endblock %}

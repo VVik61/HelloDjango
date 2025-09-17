@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from .utils import CkeditorCustomStorage
+from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
 
 load_dotenv()
 
@@ -22,27 +24,87 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 ENVIRONMENT = os.getenv("ENVIRONMENT")
 
-# SECRET_KEY = 'django-insecure-#p2!vr5)aw@1*53@crv0pgwn^=yybehwtul65erq2#w&$sv^lm'
 
 DEBUG = ENVIRONMENT != "PRODUCTION"
 
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
+if ENVIRONMENT == "PRODUCTION":
+    ALLOWED_HOSTS = ["nfkard.ru", "vikivvc9.beget.tech"]
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "myapp",
-
+    'core.apps.CoreConfig',
+    "users.apps.UsersConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_ckeditor_5",
+    "django_extensions",
 ]
 
+
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "users:dashboard"
+LOGOUT_REDIRECT_URL = "home"
+
+if ENVIRONMENT != "PRODUCTION":
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "{levelname} {asctime} {module} {message}",
+                "style": "{",
+            },
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "verbose",
+            },
+            "file": {
+                "level": "DEBUG",
+                "class": "logging.FileHandler",
+                "filename": "debug.log",
+                "formatter": "verbose",
+            },
+        },
+        "root": {
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+        },
+        "loggers": {
+            "django": {
+                "handlers": ["console", "file"],
+                "level": "INFO",
+                "propagate": False,
+            },
+            "users": {
+                "handlers": ["console", "file"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
+        },
+    }
+AUTH_USER_MODEL = "users.User"
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -102,23 +164,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = "Ru"
-
 TIME_ZONE = "Europe/Moscow"
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
 if ENVIRONMENT == "PRODUCTION":
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
@@ -128,7 +180,6 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "static"),
-        
     ]
 
 # if DEBUG:
@@ -140,7 +191,9 @@ else:
 #     STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static",]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

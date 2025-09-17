@@ -1,0 +1,30 @@
+{% extends 'base.html' %}  <!-- Наследуемся от base.html -->
+{% load static %}
+
+{% block title %}Главная страница | Медицинский портал{% endblock %}
+
+{% block content %}
+    {# Явное подключение JS  ИИ говорит, что скрипт дублируется, но удалять нельзя - не работает #}
+    <script src="{% static 'global/js/menu.js' %}"></script>
+    {# Явное подключение меню с передачей переменной #}
+    {% include "core/includes/menu.html" with main_menu=main_menu %}
+
+<div class="banner" style="background-color: #f0f0f0; padding: 2rem; text-align: center;">
+    <h1 style="color: #388f1e;">Добро пожаловать на медицинский портал</h1>
+    <p>Ваш надежный источник медицинской информации</p>
+</div>
+
+<div class="features" style="display: flex; justify-content: space-around; padding: 2rem;">
+    <div class="feature-card" style="background: white; padding: 1rem; border-radius: 8px; width: 30%;">
+        <h3 style="color: #388f1e;">Анкетирование</h3>
+        <p>Пройдите анкеты для оценки состояния здоровья</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'anketa:start' %}" class="btn" style="background: #388f1e; color: white; padding: 0.5rem 1rem; text-decoration: none; display: inline-block; margin-top: 1rem;">Начать</a>
+        {% else %}
+            <p>Для доступа требуется авторизация</p>
+        {% endif %}
+    </div>
+
+ {{ flatpage.content }}
+{% endblock %}
+</div>

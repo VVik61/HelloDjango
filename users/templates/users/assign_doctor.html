@@ -1,0 +1,52 @@
+<!-- users/templates/users/assign_doctor.html -->
+{% extends 'base.html' %}
+
+{% block title %}Выбор лечащего врача{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>Выбор лечащего врача</h3>
+        </div>
+        <div class="card-body">
+            {% if doctors %}
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Выберите вашего лечащего врача:</label>
+                    
+                    {% for doctor in doctors %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" 
+                                       name="doctor_id" value="{{ doctor.id }}" 
+                                       id="doctor_{{ doctor.id }}"
+                                       {% if user.assigned_doctor.id == doctor.id %}checked{% endif %}>
+                                <label class="form-check-label" for="doctor_{{ doctor.id }}">
+                                    <strong>{{ doctor.get_full_name|default:doctor.username }}</strong>
+                                    {% if doctor.specialization %}
+                                    <br><span class="text-muted">Специализация: {{ doctor.specialization }}</span>
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn btn-success">Сохранить выбор</button>
+                <a href="{% url 'users:dashboard' %}" class="btn btn-secondary">Отмена</a>
+            </form>
+            {% else %}
+            <div class="alert alert-warning">
+                В настоящее время нет доступных врачей. Обратитесь к администратору.
+            </div>
+            <a href="{% url 'users:dashboard' %}" class="btn btn-primary">Вернуться в личный кабинет</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

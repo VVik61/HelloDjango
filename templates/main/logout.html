@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Выход выполнен{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 2rem;">
+    <h2 style="color: #388f1e;">Вы успешно вышли из системы</h2>
+    <p><a href="{% url 'login' %}" style="color: #388f1e;">Войти снова</a></p>
+</div>
+{% endblock %}

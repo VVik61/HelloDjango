@@ -1,0 +1,16 @@
+<nav class="submenu">
+    {% for item in items %}
+    <li class="submenu-item {% if item.has_children %}has-children{% endif %}">
+        <a href="{{ item.get_absolute_url|default:'#' }}"
+           class="submenu-link"
+           {% if item.has_children %}data-submenu-trigger{% endif %}>
+            {{ item.title }}
+        </a>
+        {% if item.has_children %}
+            <div class="submenu-container" style="display:none;">
+                {% include "core/includes/submenu_items.html" with items=item.children.all %}
+            </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</nav>

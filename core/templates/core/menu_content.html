@@ -1,0 +1,9 @@
+{% load static %}
+<h2>{{ item.title }}</h2>
+<div class="content-text">
+    {{ content|safe }}
+</div>
+{% if not item.is_content_page %}
+<a href="{{ item.url }}" class="external-link">Перейти на внешний
+    ресурс</a>
+{% endif %}

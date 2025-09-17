@@ -1,0 +1,44 @@
+{% load static %}
+
+<!-- Явное подключение JS -->
+<script src="{% static 'global/js/menu.js' %}"></script>
+
+<nav class="main-menu">
+<ul style="display: flex; width: 100%; position: relative;">
+     <div style="flex-grow: 1;">
+         <img src="{% static 'global/img/logo.jpg' %}" alt="Логотип">
+	     {% for item in main_menu %}
+		   <li class="menu-item {% if item.has_children %}has-children{% endif %}" style="display: inline-block;">
+		     <a href="{{ item.get_absolute_url }}"
+			     class="menu-link"
+
+				 {% if item.has_children %}data-submenu-trigger{% endif %}>
+				    {{ item.title }}
+             </a>
+             {% if item.has_children %}
+			     <div class="submenu-container" style="display:none;">
+                    {% include "core/includes/submenu_items.html" with items=item.children.all %}
+				 </div>
+             {% endif %}
+           </li>
+        {% endfor %}
+     </div>		 
+	 
+	 <li style="margin-left: auto;">
+        {% if user.is_authenticated %}
+           <i class="fa fa-user" style="color: white; margin-right: 5px;"></i>
+		   <span style="color: white; margin-right: 15px;">{{ user }}</span>
+           <form action="{% url 'users:logout' %}" method="post" style="display: inline;">
+               {% csrf_token %}
+               <button type="submit" style="background: none; border: none; color: white; cursor: pointer; padding: 0;">
+                   Выйти
+               </button>
+           </form>
+        {% else %}
+           <i class="fa fa-user" style="color: white; margin-right: 5px;"></i>
+		   <a href="{% url 'login' %}" style="color: white;">Войти/Зарегистрироваться</a>
+		{% endif %}
+		
+     </li>
+</ul>
+</nav>

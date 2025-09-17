@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">{% block list_title %}Пользователи{% endblock %}</h2>
+
+    {% block list_filters %}{% endblock %}
+
+    {% if object_list %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ФИО</th>
+                    <th>Роль</th>
+                    <th>Email</th>
+                    <th>Дата регистрации</th>
+                    {% block additional_headers %}{% endblock %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in object_list %}
+                <tr>
+                    <td>{{ user.get_full_name }}</td>
+                    <td>{{ user.get_role_display }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.date_joined|date:"d.m.Y" }}</td>
+                    {% block additional_columns %}{% endblock %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        {% block empty_message %}Нет пользователей для отображения.{% endblock %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

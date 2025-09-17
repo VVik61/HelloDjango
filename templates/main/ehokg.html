@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+{#    <link rel="stylesheet" href="css/bootstrap.min.css">#}
+{#	<link rel="stylesheet" href="css/bootstrap.css">#}
+	<!--link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,cyrillic" rel="stylesheet" type="text/css"--!>
+</head>	
+<body>
+<header>
+    <div>
+        ЭХО-кардиографию (ЭХО-КГ)
+        ЭХО-КГ позволяет исследовать и оценить строение и его функции.
+        Во время проведения ЭХО-КГ можно оценить структуру сердца, размеры и состояние камер сердца, состояние предсердий и клапанов, работу сократительной функции.
+        ЭХО-КГ применяется для диагностики острых и хронических патологий сердца.
+        
+        На это исследование направляет врач при определенных показаниях:
+        нарушение ритма сердцебиения;
+        отдышка;
+        повышенное давление;
+        головокружение.
+   </div>
+</header>
+</body>
+
+{% include "main/na1str.html" %}
+{% endblock %}

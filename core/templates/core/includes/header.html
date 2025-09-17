@@ -1,0 +1,19 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="header">
+    <div class="verh">
+        <img src="{% static 'images/logo1.jpg' %}" alt="Логотип">
+        {% block title %}<h2>Любопытный кардиолог</h2>{% endblock %}
+    </div>
+
+
+    <div>
+    {% include 'includes/main_menu.html' %}
+    <div class="container">
+        {% include 'includes/submenu_panel.html' %}
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+

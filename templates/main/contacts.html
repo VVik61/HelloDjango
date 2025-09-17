@@ -1,0 +1,33 @@
+{% load static %} 
+
+{% block contacts %}
+<div class="container">
+    <h1>Наши контакты</h1>
+    
+    <div class="contact-info">
+        <div class="contact-item">
+            <h3><i class="fas fa-map-marker-alt"></i> Адрес</h3>
+            <p>г.Наро-Фоминск, ул.Калинина, д.23</p>
+        </div>
+        
+        <div class="contact-item">
+            <h3><i class="fas fa-phone"></i> Телефоны</h3>
+            <p>+7 (495) 123-45-67 (справочная)</p>
+            <p>+7 (495) 765-43-21 (регистратура)</p>
+        </div>
+        
+        <div class="contact-item">
+            <h3><i class="fas fa-envelope"></i> Электронная почта</h3>
+            <p>info@medportal.example.com</p>
+            <p>support@medportal.example.com</p>
+        </div>
+        
+        <div class="contact-item">
+            <h3><i class="fas fa-clock"></i> Часы работы</h3>
+            <p>Пн-Пт: 8:00 - 20:00</p>
+            <p>Сб-Вс: 9:00 - 18:00</p>
+        </div>
+    </div>
+</div>
+{% include "main/na1str.html" %}    
+{% endblock %}
